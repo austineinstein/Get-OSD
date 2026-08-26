@@ -16,4 +16,4 @@ Get OSD provides technological tools and data. Users are responsible for their o
 
 Cryptoassets are high-risk and can fall in value. Users may lose some or all of the money they invest.
 
-This disclaimer is provided for informational purposes and does not constitute legal or regulatory advice. Flystore Ltd should obtain appropriate UK legal advice regarding the application of the Financial Services and Markets Act 2000, the UK financial-promotion regime and applicable cryptoasset rules to Get OSD, its API, website, application and associated communications.
+This disclaimer is provided for informational purposes and does not constitute legal or regulatory advice. Flystore Ltd obtains appropriate UK legal advice regarding the application of the Financial Services and Markets Act 2000, the UK financial-promotion regime and applicable cryptoasset rules to Get OSD, its API, website, application and associated communications.
