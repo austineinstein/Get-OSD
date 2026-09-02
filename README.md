@@ -1,24 +1,40 @@
-Core idea is to make **local UI control** the bridge between the technical product and the broader economic thesis. Rewrite:
+Real Blues
 
-# Get OSD UI — React + Vite + TypeScript + Tailwind
+It was known as Real Blues.
 
-Why is the UI separate from the actual deployment?
+Now it's something else entirely.
 
-**Because you should be able to run it locally if you want control.**
+Get started
 
-Control over the interface.
-Control over the experience.
-Control over how you build and test before deployment.
+Clone the repo. Run it locally. Make it yours.
 
-And that principle scales beyond the UI:
+git clone github.com/austineinstein/get-osd
+cd get-osd/oustor
+npm install
+npm run dev
 
-**Expand demand.
-Expand the economies.
-Expand the ecosystem.**
+Or deploy directly from GitHub when you're ready.
 
-Turn attention into measurable demand.
-Turn demand into transactions.
-Turn transactions into recurring economic activity.
-Turn economic activity into an ecosystem of utility.
+Why is the UI separate?
 
-**Then get started.**
+Because your interface shouldn't be tied to how you deploy.
+
+The deployment is yours.
+
+The UI is yours.
+
+Run the interface locally and experiment with it before anything goes live. Change it. Break it. Rebuild it. Make it fit the way you work.
+
+Nothing needs to be deployed while you're figuring it out. (https://docs.google.com/document/d/1GQL2o4OWZUd_rVXHprTLA6xzZ1MKYu77OZKo9ojn8-I/edit?usp=drivesdk)
+
+Local first. Deploy when ready.
+
+You control the interface.
+
+You control the experience.
+
+You decide when it goes live.
+
+"Follow this link to join the active repo — it's free! →" 
+
+Deploy from GitHub →
