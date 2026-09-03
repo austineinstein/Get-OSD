@@ -9,13 +9,13 @@ Get started
 
 Clone the repo. Run it locally. Make it yours.
 
-git clone github.com/austineinstein/get-osd
+`git clone github.com/austineinstein/get-osd`
 
-cd get-osd/oustor
+`cd get-osd/oustor`
 
-npm install
+`npm install`
 
-npm run dev
+`npm run dev`
 
 Or deploy directly from GitHub when you're ready.
 
