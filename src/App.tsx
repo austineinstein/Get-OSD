@@ -14,7 +14,7 @@ export default function App() {
             <a href="https://get-osd.vercel.app/" target="_blank" rel="noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
               Vercel build
             </a>
-            <a href="https://get-osd.fancradle.com/" target="_blank" rel="noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
+            <a href="https://realblues.lovable.app/" target="_blank" rel="noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
               Fancradle build
             </a>
             <a href="https://github.com/FancradProjects/new" target="_blank" rel="noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
