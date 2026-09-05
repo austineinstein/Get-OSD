@@ -1,9 +1,11 @@
 node_modules
 dist
+get-osd-backend
 .env
 .DS_Store
 .vscode
 .idea
+.github
 
 # Local env
 .env.local

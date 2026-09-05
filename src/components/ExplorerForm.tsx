@@ -1,118 +1,95 @@
 import React, { useState } from 'react';
 
-const DEFAULT_PAYLOAD = {
-  protocol: 'uniswap',
-  action: 'explore',
-  resource: 'token',
-  network: 'ethereum',
-  contractAddress: '0x2158ef983b7aa729fa30cfb05dddc79ac85aef43'
+type Resource = 'balance' | 'transaction' | 'receipt' | 'block';
+
+const DEFAULT_VALUES: Record<Resource, string> = {
+  balance: '0x0000000000000000000000000000000000000000',
+  transaction: '',
+  receipt: '',
+  block: 'latest'
 };
 
+const RESOURCE_LABELS: Record<Resource, string> = {
+  balance: 'Balance',
+  transaction: 'Transaction',
+  receipt: 'Receipt',
+  block: 'Block'
+};
+
+function formatValue(value: unknown): string {
+  return typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+}
+
 export default function ExplorerForm() {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1/explore';
-  const [payloadText, setPayloadText] = useState(JSON.stringify(DEFAULT_PAYLOAD, null, 2));
-  const [responseText, setResponseText] = useState<string | null>(null);
+  const apiUrl = import.meta.env.VITE_API_URL || '/api/v1/explore';
+  const [resource, setResource] = useState<Resource>('balance');
+  const [value, setValue] = useState(DEFAULT_VALUES.balance);
+  const [response, setResponse] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ code: string; message: string } | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function changeResource(nextResource: Resource) {
+    setResource(nextResource);
+    setValue(DEFAULT_VALUES[nextResource]);
+    setResponse(null);
     setError(null);
-    setResponseText(null);
+  }
 
-    let parsed;
-    try {
-      parsed = JSON.parse(payloadText);
-    } catch (err) {
-      setError('Invalid JSON payload. Fix and try again.');
-      return;
-    }
-
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setLoading(true);
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(parsed)
-      });
+    setResponse(null);
+    setError(null);
 
-      const text = await res.text();
-      if (!res.ok) {
-        setError(`Request failed: ${res.status} ${res.statusText}`);
-        setResponseText(text);
+    const encodedValue = encodeURIComponent(value.trim());
+    const path = resource === 'balance'
+      ? `/address/${encodedValue}/balance`
+      : resource === 'transaction'
+        ? `/transaction/${encodedValue}`
+        : resource === 'receipt'
+          ? `/transaction/${encodedValue}/receipt`
+          : `/block/${encodedValue}`;
+
+    try {
+      const result = await fetch(`${apiUrl.replace(/\/$/, '')}${path}`);
+      const body = await result.json();
+      if (!result.ok) {
+        setError(body.error ?? { code: 'request_failed', message: 'The explorer request failed.' });
       } else {
-        try {
-          const obj = JSON.parse(text);
-          setResponseText(JSON.stringify(obj, null, 2));
-        } catch {
-          setResponseText(text);
-        }
+        setResponse(body);
       }
-    } catch (err: any) {
-      setError(err.message || String(err));
+    } catch {
+      setError({ code: 'network_error', message: 'The explorer API could not be reached.' });
     } finally {
       setLoading(false);
     }
   }
 
-  function fillDefault() {
-    setPayloadText(JSON.stringify(DEFAULT_PAYLOAD, null, 2));
-  }
-
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">API URL</label>
-          <input
-            type="text"
-            value={apiUrl}
-            readOnly
-            className="w-full rounded border px-3 py-2 bg-slate-50 text-sm text-slate-700"
-          />
-          <p className="text-xs text-slate-500 mt-1">Change VITE_API_URL in .env when needed.</p>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Request JSON</label>
-          <textarea
-            rows={10}
-            value={payloadText}
-            onChange={(e) => setPayloadText(e.target.value)}
-            className="w-full font-mono text-sm rounded border p-3 bg-white"
-          />
-          <div className="flex gap-2 mt-2">
-            <button
-              type="button"
-              onClick={fillDefault}
-              className="px-3 py-2 bg-slate-100 rounded border text-sm"
-            >
-              Reset to default
-            </button>
-            <button
-              type="submit"
-              className="px-3 py-2 bg-indigo-600 text-white rounded text-sm disabled:opacity-60"
-              disabled={loading}
-            >
-              {loading ? 'Submitting…' : 'Submit'}
-            </button>
-          </div>
-        </div>
-      </form>
-
-      <div className="mt-6">
-        <h3 className="text-sm font-medium text-slate-700 mb-2">Response</h3>
-        {error && (
-          <div className="mb-3 text-sm text-red-700 bg-red-50 p-3 rounded border border-red-100">
-            {error}
-          </div>
-        )}
-        <pre className="max-h-[60vh] overflow-auto rounded border p-3 bg-black text-white text-xs font-mono">
-          {responseText ?? (loading ? 'Waiting for response…' : 'No response yet.')}
-        </pre>
+    <section className="explorer-panel" aria-labelledby="explorer-heading">
+      <div className="panel-heading">
+        <div><p className="eyebrow">Mainnet lookup</p><h2 id="explorer-heading">Explore Ethereum</h2></div>
+        <span className="status-pill"><span aria-hidden="true" /> RPC gateway ready</span>
       </div>
-    </div>
+      <div className="resource-tabs" role="tablist" aria-label="Explorer resource">
+        {(Object.keys(RESOURCE_LABELS) as Resource[]).map((item) => (
+          <button key={item} className={resource === item ? 'resource-tab active' : 'resource-tab'} onClick={() => changeResource(item)} role="tab" aria-selected={resource === item} type="button">{RESOURCE_LABELS[item]}</button>
+        ))}
+      </div>
+      <form onSubmit={handleSubmit} className="lookup-form">
+        <label htmlFor="explorer-value">{resource === 'balance' ? 'Ethereum address' : resource === 'block' ? 'Block number, tag, or hash' : 'Transaction hash'}</label>
+        <div className="lookup-row">
+          <input id="explorer-value" value={value} onChange={(event) => setValue(event.target.value)} placeholder={resource === 'balance' ? '0x...' : resource === 'block' ? 'latest or 0x...' : '0x...'} required spellCheck={false} autoComplete="off" />
+          <button className="submit-button" type="submit" disabled={loading || !value.trim()}>{loading ? 'Loading' : 'Inspect'}</button>
+        </div>
+        <p className="field-note">GET {apiUrl.replace(/\/$/, '')}/{resource === 'receipt' ? 'transaction/:hash/receipt' : `${resource}/:value`}</p>
+      </form>
+      <div className="result-area" aria-live="polite">
+        {error && <div className="error-box"><strong>{error.code}</strong><span>{error.message}</span></div>}
+        {response !== null && <pre className="result-box">{formatValue(response)}</pre>}
+        {response === null && !error && !loading && <div className="empty-result">Choose a resource and inspect a mainnet value.</div>}
+        {loading && <div className="empty-result">Querying the gateway...</div>}
+      </div>
+    </section>
   );
 }
