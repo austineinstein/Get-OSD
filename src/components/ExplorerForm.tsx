@@ -9,7 +9,7 @@ const DEFAULT_PAYLOAD = {
 };
 
 export default function ExplorerForm() {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1/explore';
+  const apiUrl = import.meta.env.VITE_API_URL || '/api/v1/explore';
   const [payloadText, setPayloadText] = useState(JSON.stringify(DEFAULT_PAYLOAD, null, 2));
   const [responseText, setResponseText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,14 +33,15 @@ export default function ExplorerForm() {
       const res = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify(parsed)
       });
 
       const text = await res.text();
       if (!res.ok) {
-        setError(`Request failed: ${res.status} ${res.statusText}`);
+        setError(`Request failed: ${res.status} ${res.statusText || 'Unknown error'}`);
         setResponseText(text);
       } else {
         try {
