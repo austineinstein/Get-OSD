@@ -1,3 +1,30 @@
+# Get OSD
+
+The explorer uses the deployed FanCradle Worker API by default:
+
+`https://blue-lake-2cdb.fancradle.workers.dev/api/v1/explore`
+
+Set `VITE_API_URL` when running against another compatible API, such as a local
+gateway during development.
+
+## Explorer network errors
+
+If the explorer shows `network_error` while the Worker responds successfully to
+`curl`, inspect the browser response for `Access-Control-Allow-Origin`. A
+browser reports a missing CORS header as a network failure even when the API
+returns HTTP 200. The deployed Worker must include the app origin in its
+`ALLOWED_ORIGINS` configuration, or explicitly allow `*` for a public
+read-only API.
+
+Verify the deployed configuration with:
+
+```sh
+curl -i -H 'Origin: https://get-osd.vercel.app' \
+	https://blue-lake-2cdb.fancradle.workers.dev/api/v1/explore/block/latest
+```
+
+The response must contain `Access-Control-Allow-Origin` before browser clients
+can call the API.
 It was known as Real Blues.
 
 

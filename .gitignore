@@ -1,6 +1,7 @@
 node_modules
 dist
 get-osd-backend
+cloudflare-worker
 .env
 .DS_Store
 .vscode

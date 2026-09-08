@@ -21,7 +21,7 @@ function formatValue(value: unknown): string {
 }
 
 export default function ExplorerForm() {
-  const apiUrl = import.meta.env.VITE_API_URL || '/api/v1/explore';
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://blue-lake-2cdb.fancradle.workers.dev/api/v1/explore';
   const [resource, setResource] = useState<Resource>('balance');
   const [value, setValue] = useState(DEFAULT_VALUES.balance);
   const [response, setResponse] = useState<unknown>(null);
