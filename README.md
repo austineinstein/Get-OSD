@@ -25,6 +25,21 @@ curl -i -H 'Origin: https://get-osd.vercel.app' \
 
 The response must contain `Access-Control-Allow-Origin` before browser clients
 can call the API.
+
+The production Worker deployment sequence is:
+
+```sh
+cd cloudflare-worker
+npx wrangler login
+npx wrangler secret put ALLOWED_ORIGINS
+# Enter: https://get-osd.vercel.app
+npx wrangler deploy
+```
+
+The Worker should normalize configured origins by trimming whitespace and
+trailing slashes, handle `OPTIONS` with `204 No Content`, and attach CORS
+headers to both success and error responses. A successful API status alone is
+not sufficient for browser access.
 It was known as Real Blues.
 
 
