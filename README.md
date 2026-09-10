@@ -1,46 +1,7 @@
 # Get OSD
 
-The explorer uses the deployed FanCradle Worker API by default:
-
-`https://blue-lake-2cdb.fancradle.workers.dev/api/v1/explore`
-
 Set `VITE_API_URL` when running against another compatible API, such as a local
 gateway during development.
-
-## Explorer network errors
-
-If the explorer shows `network_error` while the Worker responds successfully to
-`curl`, inspect the browser response for `Access-Control-Allow-Origin`. A
-browser reports a missing CORS header as a network failure even when the API
-returns HTTP 200. The deployed Worker must include the app origin in its
-`ALLOWED_ORIGINS` configuration, or explicitly allow `*` for a public
-read-only API.
-
-Verify the deployed configuration with:
-
-```sh
-curl -i -H 'Origin: https://get-osd.vercel.app' \
-	https://blue-lake-2cdb.fancradle.workers.dev/api/v1/explore/block/latest
-```
-
-The response must contain `Access-Control-Allow-Origin` before browser clients
-can call the API.
-
-The production Worker deployment sequence is:
-
-```sh
-cd cloudflare-worker
-npx wrangler login
-npx wrangler secret put ALLOWED_ORIGINS
-# Enter: https://get-osd.vercel.app
-npx wrangler deploy
-```
-
-The Worker should normalize configured origins by trimming whitespace and
-trailing slashes, handle `OPTIONS` with `204 No Content`, and attach CORS
-headers to both success and error responses. A successful API status alone is
-not sufficient for browser access.
-It was known as Real Blues.
 
 
 Now it's something else entirely.
@@ -84,4 +45,4 @@ You decide when it goes live.
 
 "Follow this link to join the active repo — it's free! →" 
 
-Deploy from GitHub →
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faustineinstein%2FGet-OSD&project-name=get-osd&repo-name=get-osd&demo-title=Get%20OSD&demo-url=https%3A%2F%2Fget-osd.vercel.app&env=VITE_API_URL&envDescription=API%20endpoint%20for%20OSD%20explorer&envLink=https%3A%2F%2Fgithub.com%2Faustineinstein%2FGet-OSD%23explorer-network-errors)
