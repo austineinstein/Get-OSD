@@ -22,7 +22,7 @@ function App() {
   return (
     <div className="site-shell">
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Routewise home"><span className="brand-mark">R</span><span>routewise</span></a>
+        <a className="brand" href="#top" aria-label="Fly store home"><span className="brand-mark">F</span><span>Fly store</span></a>
         <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#coverage">Coverage</a><a className="nav-cta" href="#join">Join the waitlist <span>↗</span></a></nav>
       </header>
 
@@ -66,7 +66,7 @@ function App() {
           <div className="join-form-wrap">{submitted ? <div className="success-message"><span>✓</span><strong>You&apos;re on the route.</strong><p>We&apos;ll be in touch with your first voucher run.</p></div> : <form className="join-form" onSubmit={handleSubmit}><label htmlFor="email">Add your email to start issuing vouchers to your customers</label><div className="email-row"><input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" /><button type="submit">Get started <span>→</span></button></div><small>No spam. Just a better way to move.</small></form>}</div>
         </section>
       </main>
-      <footer><span className="brand"><span className="brand-mark">R</span><span>routewise</span></span><span>THE49410 / 52290 · built for the road</span><span>© 2026</span></footer>
+      <footer><span className="brand"><span className="brand-mark">F</span><span>Fly store</span></span><span>THE49410 / 52290 · built for the road</span><span>© 2026</span></footer>
     </div>
   );
 }
