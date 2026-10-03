@@ -1,22 +1,74 @@
-import ExplorerForm from './components/ExplorerForm';
+import { useState } from 'react';
 
-export default function App() {
+const shipmentStatuses = [
+  { label: 'In progress', key: 'InProgress', tone: 'lime' },
+  { label: 'Processed', key: 'Processed', tone: 'blue' },
+  { label: 'Disputed', key: 'Disputed', tone: 'coral' },
+  { label: 'Shipped', key: 'Shipped', tone: 'amber' },
+  { label: 'Delivered', key: 'Delivered', tone: 'lime' },
+  { label: 'Pending', key: 'Pending', tone: 'blue' },
+  { label: 'Cancelled', key: 'Cancelled', tone: 'coral' },
+];
+
+function App() {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (email.trim()) setSubmitted(true);
+  }
+
   return (
-    <div className="app-shell">
+    <div className="site-shell">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="Get OSD home"><span className="brand-mark">G</span><span>Get OSD</span></a>
-        <nav aria-label="External resources"><a href="https://github.com/FancradProjects/new" target="_blank" rel="noreferrer">Source</a><a href="https://get-osd.vercel.app/" target="_blank" rel="noreferrer">Live app</a></nav>
+        <a className="brand" href="#top" aria-label="Fly store home"><span className="brand-mark">F</span><span>Fly store</span></a>
+        <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#coverage">Coverage</a><a className="nav-cta" href="#join">Join the waitlist <span>↗</span></a></nav>
       </header>
-      <main>
-        <section className="hero-section">
-          <div className="hero-copy"><p className="eyebrow">Ethereum mainnet / data gateway</p><h1>Read the chain<br /><em>with clarity.</em></h1><p className="hero-description">A focused explorer for balances, transactions, receipts, and blocks. Server-side RPC access keeps provider credentials away from your browser.</p><div className="hero-details"><span><i className="detail-dot green" /> Ethereum mainnet</span><span><i className="detail-dot amber" /> Read-only</span></div></div>
-          <div className="hero-orbit" aria-hidden="true"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="orbit-core">Ξ</div></div>
+
+      <main id="top">
+        <section className="hero" aria-labelledby="hero-heading">
+          <div className="hero-copy">
+            <p className="kicker"><span className="pulse" /> Freight, without the friction</p>
+            <h1 id="hero-heading">The shortest route<br /><i>to trust.</i></h1>
+            <p className="hero-lede">Routewise brings freight transport, asset protection and customer vouchers into one clear movement layer.</p>
+            <a className="primary-button" href="#join">Start issuing vouchers <span>→</span></a>
+            <div className="hero-meta"><span>Freight transport by road</span><span>Roadside support + protection</span></div>
+          </div>
+          <div className="route-visual" aria-label="Animated route map showing a shipment moving between locations">
+            <div className="route-grid" />
+            <div className="route-label route-label-a"><strong>BER</strong><small>pickup / 08:40</small></div>
+            <div className="route-label route-label-b"><strong>AMS</strong><small>meeting point / 14:10</small></div>
+            <div className="route-path"><span className="moving-dot" /></div>
+            <div className="route-pin pin-a" /><div className="route-pin pin-b" />
+            <div className="route-card"><span className="card-status">LIVE MOVEMENT</span><strong>RW-49410-22</strong><span>Berlin → Amsterdam</span><div className="mini-progress"><i /></div></div>
+            <span className="coordinate coordinate-a">52.5200° N<br />13.4050° E</span>
+            <span className="coordinate coordinate-b">52.3676° N<br />4.9041° E</span>
+          </div>
         </section>
-        <ExplorerForm />
-        <section className="principles" aria-label="Gateway principles"><article><span>01</span><h2>Provider agnostic</h2><p>The frontend speaks to a stable application API, never directly to Alchemy or another RPC provider.</p></article><article><span>02</span><h2>Predictable responses</h2><p>Every lookup returns a consistent data envelope, with safe errors when the chain or provider is unavailable.</p></article><article><span>03</span><h2>Built for extension</h2><p>Application identity and private records can be layered in later without mixing them into public chain data.</p></article></section>
-        <section className="notice-section" aria-labelledby="notice-heading"><p className="eyebrow">Important information</p><h2 id="notice-heading">Cryptoasset disclaimer</h2><p>Get OSD is a technological tool for users who wish to access data relating to the Uniswap Protocol and Ethereum on their own initiative. It does not provide investment advice or recommend buying, selling, holding, or otherwise dealing in any cryptoasset.</p><p>Cryptoassets are high-risk and can fall in value. Users may lose some or all of the money they invest. Users are responsible for their own decisions and independent research.</p><p className="notice-source">Issued by Flystore Ltd. This notice is informational and is not legal or regulatory advice.</p></section>
+
+        <section className="status-ribbon" aria-label="Shipment lifecycle status">
+          <div className="ribbon-intro"><span>Every movement,</span><strong>accounted for.</strong></div>
+          <div className="status-track">{shipmentStatuses.map((status, index) => <div className={`status-item ${status.tone}`} key={status.key}><span className="status-node">{index + 1}</span><span>{status.label}</span></div>)}</div>
+        </section>
+
+        <section className="coverage" id="coverage" aria-labelledby="coverage-heading">
+          <div className="section-heading"><p className="kicker">What we cover / 01</p><h2 id="coverage-heading">The physical layer<br /><i>with a safety net.</i></h2></div>
+          <div className="coverage-grid">
+            <article className="coverage-card coverage-main"><span className="card-number">01</span><div className="card-icon truck-icon" aria-hidden="true">▰</div><h3>Freight transport<br />by road</h3><p>THE49410 — move goods across cities and borders with a single, accountable status trail.</p><a href="#join">Explore movement <span>↗</span></a></article>
+            <article className="coverage-card protection-card"><span className="card-number">02</span><div className="shield-icon" aria-hidden="true">◇</div><h3>Protect your assets<br />in concert</h3><p>52290 + insurance + packaging. A coordinated layer for everything on the road.</p><div className="protection-list"><span>Insurance cover</span><span>Packaging partners</span><span>Dispute resolution</span></div></article>
+            <aside className="deadline-card"><p className="kicker">On the move / 02</p><strong>Promotion<br />starts here.</strong><div className="deadline-row"><span>VENUE DEADLINE</span><b>12.09.26</b></div><div className="deadline-row"><span>MEETING POINT</span><b>Dock 04 / BER</b></div><div className="deadline-row"><span>VOUCHERS LEFT</span><b>240 <em>of 500</em></b></div></aside>
+          </div>
+        </section>
+
+        <section className="join-section" id="join" aria-labelledby="join-heading">
+          <div><p className="kicker">Early access / 03</p><h2 id="join-heading">Make every handoff<br /><i>feel intentional.</i></h2></div>
+          <div className="join-form-wrap">{submitted ? <div className="success-message"><span>✓</span><strong>You&apos;re on the route.</strong><p>We&apos;ll be in touch with your first voucher run.</p></div> : <form className="join-form" onSubmit={handleSubmit}><label htmlFor="email">Add your email to start issuing vouchers to your customers</label><div className="email-row"><input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" /><button type="submit">Get started <span>→</span></button></div><small>No spam. Just a better way to move.</small></form>}</div>
+        </section>
       </main>
-      <footer className="footer"><span>Flystore Ltd / Get OSD</span><span>© 2026</span></footer>
+      <footer><span className="brand"><span className="brand-mark">F</span><span>Fly store</span></span><span>THE49410 / 52290 · built for the road</span><span>© 2026</span></footer>
     </div>
   );
 }
+
+export default App;
